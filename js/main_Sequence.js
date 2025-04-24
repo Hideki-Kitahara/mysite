@@ -9,7 +9,8 @@
 /*===============================================================================================================================*/
 window.addEventListener('load', () => {
 
-    setPlantUMLServer("ID_RADIO_0_INPUT_TEXT", "ID_RADIO_1_LABEL");
+//    ↓ github pagesでうまく動かないため暫定で非実装、代わりにhtmlページに値直打ち
+//    setPlantUMLServer("ID_RADIO_0_INPUT_TEXT", "ID_RADIO_1_LABEL");
 
     // ファイル読み込み時
     const fileElement = document.getElementById('ID_InputFile');

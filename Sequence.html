@@ -12,7 +12,7 @@
 <!--****************************************************************************************************************************-->
 <head>
   <meta charset="utf-8">
-  <title>C言語解析ツール</title>
+  <title>C言語⇒シーケンス図変換</title>
 
   <!--**********************************************-->
   <!--* CSS定義                                    *-->
@@ -22,7 +22,23 @@
   <!--**********************************************-->
   <!--* javascript定義                             *-->
   <!--**********************************************-->
+  <script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+
   <script src="js/common/_PageLink_Path.js"></script>
+  <script src="js/common/_GetPlantUMLServer_Path.js"></script>
+
+  <script src="js/Token/TokenMap.js"></script>
+  <script src="js/Token/ComentDel.js"></script>
+  <script src="js/Token/GetToken.js"></script>
+  
+  <script src="js/Function/GetFuncDeclaration.js"></script>
+  
+  <script src="js/Activity/GetStatementList.js"></script>
+  
+  <script src="js/Sequence/GetPlantumlSequenceMap.js"></script>
+  <script src="js/Sequence/GetSequenceDiagram.js"></script>
+  
+  <script src="js/main_Sequence.js"></script>
 
 </head>
 
@@ -38,7 +54,7 @@
     <!--* header定義                                 *-->
     <!--**********************************************-->
     <header>
-      <h1 class="title">C言語解析ツール</h1>
+      <h1 class="title">C言語⇒シーケンス図変換</h1>
     </header>
     <nav>
       <ul>
@@ -59,44 +75,40 @@
     <!--* コンテンツ定義                             *-->
     <!--**********************************************-->
     <div class="Content1">
-      <p>&nbsp■このサイトについて</p>
-      <p>
-        &nbsp&nbsp「C言語解析ツール」は、C言語で書かれたコードから各種の解析図を得ることを目指しています。<br>
-        &nbsp&nbsp 出力された内容について、品質の保障はしておりません。<br>
-        &nbsp&nbsp ご利用に際してはご自身にて結果の正しさを確認の上、ご利用ください。<br>
-        &nbsp&nbsp ※手書きで0から作成するよりかは少し楽になる程度のものです。<br>
-      </p>
-    </div>
+      <form name="Form1" method="post" action="#">
+        <p>■利用するPlantUMLサーバ</p>
 
-    <div class="Content1">
-        <p>&nbsp ■PlantUML Severの選択</p>
-        <p>
-          &nbsp UML図の出力にはPlantUMLを利用していますので、ローカルサーバとオンラインサーバのどちらを使うか選択ください。<br>
-          &nbsp (PlantUMLについては別途Webで調べてください)<br>
-          &nbsp ※ローカルサーバのテキストボックスのURLはご自身の環境に併せて変更ください<br>
-          &nbsp ※設計情報を外部サーバに送信したくない・オンラインサーバサーバだと遅い方はローカルサーバを選択ください<br>
-          &nbsp ※ローカルサーバを用意していない or とりあえず動かしたい方はオンラインサーバを選択すれば動きますが、<br>
-          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  PlantUMLのPicoServerを自PCで起動すれば手軽にローカルサーバとして利用できますので、そちらをお勧めします。
-        </p>
-        <img src="./img/top_PumlServer.png">
-      </div>    
+        <!--**********************************************-->
+        <!--* ラジオボタン0:ローカルサーバ(URL入力可)    *-->
+        <!--**********************************************-->
+        <input type="radio" id="ID_RADIO_0" name="server" value="ローカルサーバ" checked onClick="changePlantUMLServer('ID_RADIO_0', 'ID_RADIO_0_INPUT_TEXT')">
+          <label for="radio_0" id="ID_RADIO_0_LABEL">ローカルサーバ &nbsp &nbsp</label>
+          <p style="display:inline;">
+            <input type="text"   id="ID_RADIO_0_INPUT_TEXT" "name="server_url" size="50" value="">
+            <br>
+          </p>
 
-    <div class="Content1">
-      <p>&nbsp ■C言語⇒シーケンス図変換</p>
-      <p>&nbsp Cコードをシーケンス図に変換する</p>
-      <img src="./img/Top_Sequence.png">
-    </div>
+        <!--**********************************************-->
+        <!--* ラジオボタン1:オンラインサーバ             *-->
+        <!--**********************************************-->
+        <input type="radio" id="ID_RADIO_1" name="server" value="オンラインサーバ" onClick="changePlantUMLServer('ID_RADIO_0', 'ID_RADIO_0_INPUT_TEXT')">
+          <label for="radio_1" id="ID_RADIO_1_LABEL">オンラインサーバ</label>
+          
+      </form>
 
-    <div class="Content1">
-      <p>&nbsp ■C言語⇒アクティビティ図変換</p>
-      <p>&nbsp Cコードをアクティビティ図に変換する</p>
-      <img src="./img/Top_Activity.png">
-    </div>
-    
-    <div class="Content1">
-      <p>&nbsp ■デバッグ用の途中データ表示</p>
-      <p>&nbsp 制作者(私)向けのデバッグ用情報です。</p>
-      <p>&nbsp ※制作者(私)以外には意味のないページです。</p>
+
+      <p>■ファイルを選択してください</p>
+      <input id="ID_InputFile" type="file">
+      <br>
+      <br>
+
+
+      <details open>
+        <summary> シーケンス図(Clickで畳めます)</summary>
+        <div id="ID_SequenceDiagram_View_Area"></div>
+      </details>
+      <br>
+
     </div>
     
   </section>
@@ -118,6 +130,7 @@
 <!--* バージョン : 日付       : 変更者   : 変更内容                                                                            *-->
 <!--*--------------------------------------------------------------------------------------------------------------------------*-->
 <!--* 0.0.0      : 2024/11/28 : 北原英樹 : 新規作成                                                                            *-->
+<!--*            : 2025/03/28 : 北原英樹 : シーケンス図表示機能以外を削除                                                      *-->
 <!--*                                                                                                                          *-->
 <!--*                                                                                                                          *-->
 <!--****************************************************************************************************************************-->

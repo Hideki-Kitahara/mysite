@@ -1,4 +1,4 @@
-# [Cコード解析ツール](https://hideki-kitahara.github.io/mysite/index.html)
+# [Cコード解析ツール](https://hideki-kitahara.github.io/mysite)
 「C言語解析ツール」は、C言語で書かれたコードから各種の解析図を得ることを目指しています。<br>
  利用できる機能は下記です。
 
